@@ -14,9 +14,6 @@ services:
       - MEMCACHE_SERVERS=memcached:11211
     ports:
       - 9393:9393
-    links:
-      - mongodb
-      - memcached
     depends_on:
       - mongodb
       - memcached

@@ -1,0 +1,38 @@
+version: '3'
+services:
+  massr:
+    build: .
+    image: massr
+    container_name: "massr"
+    environment:
+      - LANG=ja_JP.utf8
+      - TZ=Asia/Tokyo
+      - RACK_ENV=production
+      - TWITTER_CONSUMER_ID=YOUR_TWITTER_API_KEY
+      - TWITTER_CONSUMER_SECRET=YOUR_TWITTER_API_SECRET
+      - MONGODB_URI=mongodb://mongodb:27017
+      - MEMCACHE_SERVERS=memcached:11211
+    ports:
+      - 9393:9393
+    links:
+      - mongodb
+      - memcached
+    depends_on:
+      - mongodb
+      - memcached
+  mongodb:
+    image: mongo:latest
+    container_name: "mongodb"
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles --logpath=/dev/null # --quiet
+  memcached:
+    image: memcached:latest
+    container_name: "memcached"
+    ports:
+      - 11211:11211
